@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Chatbot</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #chat-box {
+            background-color: #222;
+            padding: 10px;
+            height: 400px;
+            overflow-y: auto;
+            margin: 20px;
+            border-radius: 8px;
+        }
+        #user-input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .user-message {
+            color: #4CAF50;
+        }
+        .assistant-message {
+            color: #00BFFF;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat with the Assistant</h1>
+    <div id="chat-box"></div>
+    <input type="text" id="user-input" placeholder="Type your message here...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById("user-input").value;
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: userInput })
+            });
+
+            const data = await response.json();
+            const reply = data.reply;
+
+            const chatBox = document.getElementById("chat-box");
+            chatBox.innerHTML += `<p class="user-message"><strong>You:</strong> ${userInput}</p>`;
+            chatBox.innerHTML += `<p class="assistant-message"><strong>Assistant:</strong> ${reply}</p>`;
+        }
+    </script>
+</body>
+</html>
